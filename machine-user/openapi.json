@@ -1626,15 +1626,14 @@
         "description" : "Machine user client identifier"
       },
       "machineUserClientSecret" : {
-        "type" : "apiKey",
-        "in" : "header",
-        "name" : "authorization",
-        "description" : "Machine user client secret"
+        "type" : "http",
+        "scheme" : "bearer",
+        "description" : "Machine user client secret, sent as a Bearer token in the Authorization header"
       }
     }
   },
   "servers" : [ {
-    "url" : "https://api.cleverone.io",
+    "url" : "https://funeral-management.api.cleverone.io",
     "description" : "Production"
   } ],
   "security" : [ {
