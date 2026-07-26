@@ -102,20 +102,9 @@
         }
       }
     },
-    "/machine-user-api/v1/tenants/{tenantId}/legal-entities/{legalEntityId}/processes/{processId}/documents" : {
-      "post" : {
-        "description" : "Currently only supports upload of offer documents. the processId can be obtained from the response of the create request endpoint",
-        "operationId" : "UploadProcessDocument",
-        "requestBody" : {
-          "content" : {
-            "application/json" : {
-              "schema" : {
-                "$ref" : "#/components/schemas/UploadProcessDocumentInputPayload"
-              }
-            }
-          },
-          "required" : true
-        },
+    "/machine-user-api/v1/tenants/{tenantId}/legal-entities/{legalEntityId}/branches" : {
+      "get" : {
+        "operationId" : "ListBranches",
         "parameters" : [ {
           "name" : "tenantId",
           "in" : "path",
@@ -135,47 +124,14 @@
             "format" : "int32"
           },
           "required" : true
-        }, {
-          "name" : "processId",
-          "in" : "path",
-          "description" : "Brand::ProcessId",
-          "schema" : {
-            "type" : "integer",
-            "description" : "Brand::ProcessId",
-            "format" : "int32"
-          },
-          "required" : true
-        }, {
-          "name" : "billingTabId",
-          "in" : "query",
-          "description" : "only required if factura is enabled. see facturaEnabled flag when process is created",
-          "schema" : {
-            "type" : "integer",
-            "description" : "only required if factura is enabled. see facturaEnabled flag when process is created",
-            "format" : "int32"
-          }
-        }, {
-          "name" : "x-filename",
-          "in" : "header",
-          "schema" : {
-            "type" : "string"
-          },
-          "required" : true
-        }, {
-          "name" : "x-mime-type",
-          "in" : "header",
-          "schema" : {
-            "type" : "string"
-          },
-          "required" : true
         } ],
         "responses" : {
-          "201" : {
-            "description" : "UploadProcessDocument 201 response",
+          "200" : {
+            "description" : "ListBranches 200 response",
             "content" : {
               "application/json" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/ProcessDocument"
+                  "$ref" : "#/components/schemas/ListBranchesOutputPayload"
                 }
               }
             }
@@ -246,26 +202,15 @@
             }
           }
         },
-        "tags" : [ "Processes" ],
+        "tags" : [ "Branches" ],
         "x-machine-user-auth" : {
           "roles" : [ "OFFER_CONFIGURATOR" ]
         }
       }
     },
-    "/machine-user-api/v1/tenants/{tenantId}/legal-entities/{legalEntityId}/requests" : {
-      "post" : {
-        "description" : "To create a request, follow these steps:\n    1. get your tenantId and legalEntityId ready. these should be known ahead of time.\n    2. list the available burial forms and choose one.\n    3. list the available products and choose which to include in the request including the quantity. these are the 'items'\n    4. pass the information on the deceased person and the client in the respective fields.\n    5. optionally gather the grave type and legal entity branch information from their respective endpoints.\n    6. use the upload document endpoint to upload the corresponding pdf document if needed.\n    ",
-        "operationId" : "CreateRequest",
-        "requestBody" : {
-          "content" : {
-            "application/json" : {
-              "schema" : {
-                "$ref" : "#/components/schemas/RequestCreateDto"
-              }
-            }
-          },
-          "required" : true
-        },
+    "/machine-user-api/v1/tenants/{tenantId}/legal-entities/{legalEntityId}/burial-types" : {
+      "get" : {
+        "operationId" : "ListBurialTypes",
         "parameters" : [ {
           "name" : "tenantId",
           "in" : "path",
@@ -285,14 +230,48 @@
             "format" : "int32"
           },
           "required" : true
+        }, {
+          "name" : "query",
+          "in" : "query",
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "sortBy",
+          "in" : "query",
+          "schema" : {
+            "$ref" : "#/components/schemas/BurialTypeSortBy"
+          }
+        }, {
+          "name" : "sortDirection",
+          "in" : "query",
+          "schema" : {
+            "$ref" : "#/components/schemas/SortDirection"
+          }
+        }, {
+          "name" : "cursor",
+          "in" : "query",
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "schema" : {
+            "type" : "integer",
+            "default" : 50,
+            "maximum" : 60,
+            "minimum" : 1,
+            "format" : "int32"
+          }
         } ],
         "responses" : {
-          "201" : {
-            "description" : "CreateRequest 201 response",
+          "200" : {
+            "description" : "ListBurialTypes 200 response",
             "content" : {
               "application/json" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/RequestCreateResponse"
+                  "$ref" : "#/components/schemas/PaginatedBurialTypes"
                 }
               }
             }
@@ -363,7 +342,7 @@
             }
           }
         },
-        "tags" : [ "Processes" ],
+        "tags" : [ "Burial Types" ],
         "x-machine-user-auth" : {
           "roles" : [ "OFFER_CONFIGURATOR" ]
         }
@@ -802,9 +781,20 @@
         }
       }
     },
-    "/machine-user-api/v1/tenants/{tenantId}/legal-entities/{legalEntityId}/branches" : {
-      "get" : {
-        "operationId" : "ListBranches",
+    "/machine-user-api/v1/tenants/{tenantId}/legal-entities/{legalEntityId}/processes/{processId}/documents" : {
+      "post" : {
+        "description" : "Currently only supports upload of offer documents. the processId can be obtained from the response of the create request endpoint",
+        "operationId" : "UploadProcessDocument",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/UploadProcessDocumentInputPayload"
+              }
+            }
+          },
+          "required" : true
+        },
         "parameters" : [ {
           "name" : "tenantId",
           "in" : "path",
@@ -824,14 +814,47 @@
             "format" : "int32"
           },
           "required" : true
+        }, {
+          "name" : "processId",
+          "in" : "path",
+          "description" : "Brand::ProcessId",
+          "schema" : {
+            "type" : "integer",
+            "description" : "Brand::ProcessId",
+            "format" : "int32"
+          },
+          "required" : true
+        }, {
+          "name" : "billingTabId",
+          "in" : "query",
+          "description" : "only required if factura is enabled. see facturaEnabled flag when process is created",
+          "schema" : {
+            "type" : "integer",
+            "description" : "only required if factura is enabled. see facturaEnabled flag when process is created",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "x-filename",
+          "in" : "header",
+          "schema" : {
+            "type" : "string"
+          },
+          "required" : true
+        }, {
+          "name" : "x-mime-type",
+          "in" : "header",
+          "schema" : {
+            "type" : "string"
+          },
+          "required" : true
         } ],
         "responses" : {
-          "200" : {
-            "description" : "ListBranches 200 response",
+          "201" : {
+            "description" : "UploadProcessDocument 201 response",
             "content" : {
               "application/json" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/ListBranchesOutputPayload"
+                  "$ref" : "#/components/schemas/ProcessDocument"
                 }
               }
             }
@@ -902,15 +925,26 @@
             }
           }
         },
-        "tags" : [ "Branches" ],
+        "tags" : [ "Processes" ],
         "x-machine-user-auth" : {
           "roles" : [ "OFFER_CONFIGURATOR" ]
         }
       }
     },
-    "/machine-user-api/v1/tenants/{tenantId}/legal-entities/{legalEntityId}/burial-types" : {
-      "get" : {
-        "operationId" : "ListBurialTypes",
+    "/machine-user-api/v1/tenants/{tenantId}/legal-entities/{legalEntityId}/requests" : {
+      "post" : {
+        "description" : "To create a request, follow these steps:\n    1. get your tenantId and legalEntityId ready. these should be known ahead of time.\n    2. list the available burial forms and choose one.\n    3. list the available products and choose which to include in the request including the quantity. these are the 'items'\n    4. pass the information on the deceased person and the client in the respective fields.\n    5. optionally gather the grave type and legal entity branch information from their respective endpoints.\n    6. use the upload document endpoint to upload the corresponding pdf document if needed.\n    ",
+        "operationId" : "CreateRequest",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/RequestCreateDto"
+              }
+            }
+          },
+          "required" : true
+        },
         "parameters" : [ {
           "name" : "tenantId",
           "in" : "path",
@@ -930,48 +964,14 @@
             "format" : "int32"
           },
           "required" : true
-        }, {
-          "name" : "query",
-          "in" : "query",
-          "schema" : {
-            "type" : "string"
-          }
-        }, {
-          "name" : "sortBy",
-          "in" : "query",
-          "schema" : {
-            "$ref" : "#/components/schemas/BurialTypeSortBy"
-          }
-        }, {
-          "name" : "sortDirection",
-          "in" : "query",
-          "schema" : {
-            "$ref" : "#/components/schemas/SortDirection"
-          }
-        }, {
-          "name" : "cursor",
-          "in" : "query",
-          "schema" : {
-            "type" : "string"
-          }
-        }, {
-          "name" : "limit",
-          "in" : "query",
-          "schema" : {
-            "type" : "integer",
-            "default" : 50,
-            "maximum" : 60,
-            "minimum" : 1,
-            "format" : "int32"
-          }
         } ],
         "responses" : {
-          "200" : {
-            "description" : "ListBurialTypes 200 response",
+          "201" : {
+            "description" : "CreateRequest 201 response",
             "content" : {
               "application/json" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/PaginatedBurialTypes"
+                  "$ref" : "#/components/schemas/RequestCreateResponse"
                 }
               }
             }
@@ -1042,7 +1042,7 @@
             }
           }
         },
-        "tags" : [ "Burial Types" ],
+        "tags" : [ "Processes" ],
         "x-machine-user-auth" : {
           "roles" : [ "OFFER_CONFIGURATOR" ]
         }
@@ -1094,6 +1094,332 @@
           }
         },
         "required" : [ "legalEntityId", "name", "roles" ]
+      },
+      "LegalEntityBranch" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "description" : "Brand::LegalEntityBranchId",
+            "format" : "int32"
+          },
+          "legalEntityId" : {
+            "type" : "integer",
+            "description" : "Brand::LegalEntityId",
+            "format" : "int32"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "street" : {
+            "type" : "string"
+          },
+          "streetNumber" : {
+            "type" : "string"
+          },
+          "zipCode" : {
+            "type" : "string"
+          },
+          "city" : {
+            "type" : "string"
+          },
+          "phone" : {
+            "type" : "string"
+          },
+          "email" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "id", "legalEntityId", "name" ]
+      },
+      "ListBranchesOutputPayload" : {
+        "type" : "array",
+        "items" : {
+          "$ref" : "#/components/schemas/LegalEntityBranch"
+        }
+      },
+      "BurialKind" : {
+        "type" : "string",
+        "enum" : [ "CREMATION", "EARTH", "NEUTRAL" ]
+      },
+      "BurialType" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "description" : "Brand::BurialTypeId",
+            "format" : "int32"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "burialKind" : {
+            "$ref" : "#/components/schemas/BurialKind"
+          }
+        },
+        "required" : [ "burialKind", "id", "name" ]
+      },
+      "BurialTypeSortBy" : {
+        "type" : "string",
+        "enum" : [ "ID", "NAME" ]
+      },
+      "PaginatedBurialTypes" : {
+        "type" : "object",
+        "properties" : {
+          "total" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "prevCursor" : {
+            "type" : "string"
+          },
+          "nextCursor" : {
+            "type" : "string"
+          },
+          "items" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/BurialType"
+            }
+          }
+        },
+        "required" : [ "items", "total" ]
+      },
+      "SortDirection" : {
+        "type" : "string",
+        "enum" : [ "ASC", "DESC" ]
+      },
+      "BundlePriceType" : {
+        "type" : "string",
+        "enum" : [ "TOTAL", "FROM" ]
+      },
+      "BundleVisibility" : {
+        "type" : "string",
+        "enum" : [ "SHOW_PRODUCTS_WITH_PRICES", "SHOW_PRODUCTS_WITHOUT_PRICES", "DO_NOT_SHOW_PRODUCTS" ]
+      },
+      "PaginatedProducts" : {
+        "type" : "object",
+        "properties" : {
+          "total" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "prevCursor" : {
+            "type" : "string"
+          },
+          "nextCursor" : {
+            "type" : "string"
+          },
+          "items" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Product"
+            }
+          }
+        },
+        "required" : [ "items", "total" ]
+      },
+      "Product" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "description" : "Brand::ProductId",
+            "format" : "int32"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "description" : {
+            "type" : "string"
+          },
+          "type" : {
+            "$ref" : "#/components/schemas/ProductType"
+          },
+          "unit" : {
+            "$ref" : "#/components/schemas/ProductUnit"
+          },
+          "taxRate" : {
+            "$ref" : "#/components/schemas/TaxRate"
+          },
+          "prices" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/ProductPrice"
+            }
+          },
+          "bundleProducts" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Product"
+            }
+          },
+          "bundleProductsVisibility" : {
+            "$ref" : "#/components/schemas/BundleVisibility"
+          },
+          "bundlePriceType" : {
+            "$ref" : "#/components/schemas/BundlePriceType"
+          },
+          "bundleAvailableFromPrice" : {
+            "type" : "number"
+          },
+          "bundleAvailableFromPriceGross" : {
+            "type" : "number"
+          }
+        },
+        "required" : [ "bundleProducts", "id", "name", "prices" ]
+      },
+      "ProductPrice" : {
+        "type" : "object",
+        "properties" : {
+          "legalEntityId" : {
+            "type" : "integer",
+            "description" : "Brand::LegalEntityId",
+            "format" : "int32"
+          },
+          "price" : {
+            "type" : "number"
+          },
+          "active" : {
+            "type" : "boolean"
+          },
+          "priceGross" : {
+            "type" : "number"
+          },
+          "bundleAvailableFromPrice" : {
+            "type" : "number"
+          },
+          "bundleAvailableFromPriceGross" : {
+            "type" : "number"
+          }
+        },
+        "required" : [ "active", "legalEntityId", "price", "priceGross" ]
+      },
+      "ProductSortBy" : {
+        "type" : "string",
+        "enum" : [ "PRODUCT_CATEGORY", "ID", "STOCK", "NAME", "UPDATED_AT" ]
+      },
+      "ProductType" : {
+        "type" : "string",
+        "enum" : [ "BUNDLE", "SINGLE", "EXTERNAL", "EXPENSE", "IMPORT", "SERVICE", "PRINT", "ON_DEMAND" ]
+      },
+      "ProductUnit" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "description" : "Brand::ProductUnitId",
+            "format" : "int32"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "unitCode" : {
+            "type" : "string",
+            "description" : "Brand::UneceUnitCode"
+          }
+        },
+        "required" : [ "id", "name" ]
+      },
+      "TaxRate" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "description" : "Brand::TaxRateId",
+            "format" : "int32"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "rate" : {
+            "type" : "number"
+          }
+        },
+        "required" : [ "id", "name", "rate" ]
+      },
+      "BurialForm" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "description" : "Brand::BurialFormId",
+            "format" : "int32"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "burialType" : {
+            "$ref" : "#/components/schemas/BurialType"
+          }
+        },
+        "required" : [ "burialType", "id", "name" ]
+      },
+      "BurialFormSortBy" : {
+        "type" : "string",
+        "enum" : [ "ID", "NAME", "BURIAL_TYPE_NAME" ]
+      },
+      "PaginatedBurialForms" : {
+        "type" : "object",
+        "properties" : {
+          "total" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "prevCursor" : {
+            "type" : "string"
+          },
+          "nextCursor" : {
+            "type" : "string"
+          },
+          "items" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/BurialForm"
+            }
+          }
+        },
+        "required" : [ "items", "total" ]
+      },
+      "GraveType" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "description" : "Brand::GraveTypeId",
+            "format" : "int32"
+          },
+          "name" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "id", "name" ]
+      },
+      "GraveTypeSortBy" : {
+        "type" : "string",
+        "enum" : [ "ID", "NAME" ]
+      },
+      "PaginatedGraveTypes" : {
+        "type" : "object",
+        "properties" : {
+          "total" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "prevCursor" : {
+            "type" : "string"
+          },
+          "nextCursor" : {
+            "type" : "string"
+          },
+          "items" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/GraveType"
+            }
+          }
+        },
+        "required" : [ "items", "total" ]
       },
       "PersonCreateDto" : {
         "type" : "object",
@@ -1290,332 +1616,6 @@
       "UploadProcessDocumentInputPayload" : {
         "type" : "string",
         "format" : "byte"
-      },
-      "BundlePriceType" : {
-        "type" : "string",
-        "enum" : [ "TOTAL", "FROM" ]
-      },
-      "BundleVisibility" : {
-        "type" : "string",
-        "enum" : [ "SHOW_PRODUCTS_WITH_PRICES", "SHOW_PRODUCTS_WITHOUT_PRICES", "DO_NOT_SHOW_PRODUCTS" ]
-      },
-      "PaginatedProducts" : {
-        "type" : "object",
-        "properties" : {
-          "total" : {
-            "type" : "integer",
-            "format" : "int32"
-          },
-          "prevCursor" : {
-            "type" : "string"
-          },
-          "nextCursor" : {
-            "type" : "string"
-          },
-          "items" : {
-            "type" : "array",
-            "items" : {
-              "$ref" : "#/components/schemas/Product"
-            }
-          }
-        },
-        "required" : [ "items", "total" ]
-      },
-      "Product" : {
-        "type" : "object",
-        "properties" : {
-          "id" : {
-            "type" : "integer",
-            "description" : "Brand::ProductId",
-            "format" : "int32"
-          },
-          "name" : {
-            "type" : "string"
-          },
-          "description" : {
-            "type" : "string"
-          },
-          "type" : {
-            "$ref" : "#/components/schemas/ProductType"
-          },
-          "unit" : {
-            "$ref" : "#/components/schemas/ProductUnit"
-          },
-          "taxRate" : {
-            "$ref" : "#/components/schemas/TaxRate"
-          },
-          "prices" : {
-            "type" : "array",
-            "items" : {
-              "$ref" : "#/components/schemas/ProductPrice"
-            }
-          },
-          "bundleProducts" : {
-            "type" : "array",
-            "items" : {
-              "$ref" : "#/components/schemas/Product"
-            }
-          },
-          "bundleProductsVisibility" : {
-            "$ref" : "#/components/schemas/BundleVisibility"
-          },
-          "bundlePriceType" : {
-            "$ref" : "#/components/schemas/BundlePriceType"
-          },
-          "bundleAvailableFromPrice" : {
-            "type" : "number"
-          },
-          "bundleAvailableFromPriceGross" : {
-            "type" : "number"
-          }
-        },
-        "required" : [ "bundleProducts", "id", "name", "prices" ]
-      },
-      "ProductPrice" : {
-        "type" : "object",
-        "properties" : {
-          "legalEntityId" : {
-            "type" : "integer",
-            "description" : "Brand::LegalEntityId",
-            "format" : "int32"
-          },
-          "price" : {
-            "type" : "number"
-          },
-          "active" : {
-            "type" : "boolean"
-          },
-          "priceGross" : {
-            "type" : "number"
-          },
-          "bundleAvailableFromPrice" : {
-            "type" : "number"
-          },
-          "bundleAvailableFromPriceGross" : {
-            "type" : "number"
-          }
-        },
-        "required" : [ "active", "legalEntityId", "price", "priceGross" ]
-      },
-      "ProductSortBy" : {
-        "type" : "string",
-        "enum" : [ "PRODUCT_CATEGORY", "ID", "STOCK", "NAME", "UPDATED_AT" ]
-      },
-      "ProductType" : {
-        "type" : "string",
-        "enum" : [ "BUNDLE", "SINGLE", "EXTERNAL", "EXPENSE", "IMPORT", "SERVICE", "PRINT", "ON_DEMAND" ]
-      },
-      "ProductUnit" : {
-        "type" : "object",
-        "properties" : {
-          "id" : {
-            "type" : "integer",
-            "description" : "Brand::ProductUnitId",
-            "format" : "int32"
-          },
-          "name" : {
-            "type" : "string"
-          },
-          "unitCode" : {
-            "type" : "string",
-            "description" : "Brand::UneceUnitCode"
-          }
-        },
-        "required" : [ "id", "name" ]
-      },
-      "SortDirection" : {
-        "type" : "string",
-        "enum" : [ "ASC", "DESC" ]
-      },
-      "TaxRate" : {
-        "type" : "object",
-        "properties" : {
-          "id" : {
-            "type" : "integer",
-            "description" : "Brand::TaxRateId",
-            "format" : "int32"
-          },
-          "name" : {
-            "type" : "string"
-          },
-          "rate" : {
-            "type" : "number"
-          }
-        },
-        "required" : [ "id", "name", "rate" ]
-      },
-      "BurialForm" : {
-        "type" : "object",
-        "properties" : {
-          "id" : {
-            "type" : "integer",
-            "description" : "Brand::BurialFormId",
-            "format" : "int32"
-          },
-          "name" : {
-            "type" : "string"
-          },
-          "burialType" : {
-            "$ref" : "#/components/schemas/BurialType"
-          }
-        },
-        "required" : [ "burialType", "id", "name" ]
-      },
-      "BurialFormSortBy" : {
-        "type" : "string",
-        "enum" : [ "ID", "NAME", "BURIAL_TYPE_NAME" ]
-      },
-      "BurialKind" : {
-        "type" : "string",
-        "enum" : [ "CREMATION", "EARTH", "NEUTRAL" ]
-      },
-      "BurialType" : {
-        "type" : "object",
-        "properties" : {
-          "id" : {
-            "type" : "integer",
-            "description" : "Brand::BurialTypeId",
-            "format" : "int32"
-          },
-          "name" : {
-            "type" : "string"
-          },
-          "burialKind" : {
-            "$ref" : "#/components/schemas/BurialKind"
-          }
-        },
-        "required" : [ "burialKind", "id", "name" ]
-      },
-      "PaginatedBurialForms" : {
-        "type" : "object",
-        "properties" : {
-          "total" : {
-            "type" : "integer",
-            "format" : "int32"
-          },
-          "prevCursor" : {
-            "type" : "string"
-          },
-          "nextCursor" : {
-            "type" : "string"
-          },
-          "items" : {
-            "type" : "array",
-            "items" : {
-              "$ref" : "#/components/schemas/BurialForm"
-            }
-          }
-        },
-        "required" : [ "items", "total" ]
-      },
-      "GraveType" : {
-        "type" : "object",
-        "properties" : {
-          "id" : {
-            "type" : "integer",
-            "description" : "Brand::GraveTypeId",
-            "format" : "int32"
-          },
-          "name" : {
-            "type" : "string"
-          }
-        },
-        "required" : [ "id", "name" ]
-      },
-      "GraveTypeSortBy" : {
-        "type" : "string",
-        "enum" : [ "ID", "NAME" ]
-      },
-      "PaginatedGraveTypes" : {
-        "type" : "object",
-        "properties" : {
-          "total" : {
-            "type" : "integer",
-            "format" : "int32"
-          },
-          "prevCursor" : {
-            "type" : "string"
-          },
-          "nextCursor" : {
-            "type" : "string"
-          },
-          "items" : {
-            "type" : "array",
-            "items" : {
-              "$ref" : "#/components/schemas/GraveType"
-            }
-          }
-        },
-        "required" : [ "items", "total" ]
-      },
-      "LegalEntityBranch" : {
-        "type" : "object",
-        "properties" : {
-          "id" : {
-            "type" : "integer",
-            "description" : "Brand::LegalEntityBranchId",
-            "format" : "int32"
-          },
-          "legalEntityId" : {
-            "type" : "integer",
-            "description" : "Brand::LegalEntityId",
-            "format" : "int32"
-          },
-          "name" : {
-            "type" : "string"
-          },
-          "street" : {
-            "type" : "string"
-          },
-          "streetNumber" : {
-            "type" : "string"
-          },
-          "zipCode" : {
-            "type" : "string"
-          },
-          "city" : {
-            "type" : "string"
-          },
-          "phone" : {
-            "type" : "string"
-          },
-          "email" : {
-            "type" : "string"
-          }
-        },
-        "required" : [ "id", "legalEntityId", "name" ]
-      },
-      "ListBranchesOutputPayload" : {
-        "type" : "array",
-        "items" : {
-          "$ref" : "#/components/schemas/LegalEntityBranch"
-        }
-      },
-      "BurialTypeSortBy" : {
-        "type" : "string",
-        "enum" : [ "ID", "NAME" ]
-      },
-      "PaginatedBurialTypes" : {
-        "type" : "object",
-        "properties" : {
-          "total" : {
-            "type" : "integer",
-            "format" : "int32"
-          },
-          "prevCursor" : {
-            "type" : "string"
-          },
-          "nextCursor" : {
-            "type" : "string"
-          },
-          "items" : {
-            "type" : "array",
-            "items" : {
-              "$ref" : "#/components/schemas/BurialType"
-            }
-          }
-        },
-        "required" : [ "items", "total" ]
       }
     },
     "securitySchemes" : {
