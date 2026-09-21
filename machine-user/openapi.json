@@ -802,6 +802,147 @@
         }
       }
     },
+    "/machine-user-api/v1/tenants/{tenantId}/legal-entities/{legalEntityId}/product-categories" : {
+      "get" : {
+        "description" : "Lists the tenant's product categories. Categories are tenant-wide and not legal-entity-specific; the legalEntityId\nin the path only scopes authorization (the machine user must hold the offer-configurator role on that legal entity),\nit does not filter the categories. Use the returned category ids with the products endpoint's categoryIds query\nparameter to filter products.",
+        "operationId" : "ListProductCategories",
+        "parameters" : [ {
+          "name" : "tenantId",
+          "in" : "path",
+          "description" : "Brand::TenantId",
+          "schema" : {
+            "type" : "string",
+            "description" : "Brand::TenantId"
+          },
+          "required" : true
+        }, {
+          "name" : "legalEntityId",
+          "in" : "path",
+          "description" : "Brand::LegalEntityId",
+          "schema" : {
+            "type" : "integer",
+            "description" : "Brand::LegalEntityId",
+            "format" : "int32"
+          },
+          "required" : true
+        }, {
+          "name" : "query",
+          "in" : "query",
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "sortBy",
+          "in" : "query",
+          "schema" : {
+            "$ref" : "#/components/schemas/ProductCategorySortBy"
+          }
+        }, {
+          "name" : "sortDirection",
+          "in" : "query",
+          "schema" : {
+            "$ref" : "#/components/schemas/SortDirection"
+          }
+        }, {
+          "name" : "cursor",
+          "in" : "query",
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "schema" : {
+            "type" : "integer",
+            "default" : 50,
+            "maximum" : 60,
+            "minimum" : 1,
+            "format" : "int32"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "ListProductCategories 200 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PaginatedProductCategories"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "BadRequest 400 response",
+            "headers" : {
+              "x-amzn-trace-id" : {
+                "description" : "Brand::TraceId",
+                "schema" : {
+                  "type" : "string",
+                  "description" : "Brand::TraceId"
+                },
+                "required" : true
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized 401 response",
+            "headers" : {
+              "x-amzn-trace-id" : {
+                "description" : "Brand::TraceId",
+                "schema" : {
+                  "type" : "string",
+                  "description" : "Brand::TraceId"
+                },
+                "required" : true
+              }
+            }
+          },
+          "403" : {
+            "description" : "Forbidden 403 response",
+            "headers" : {
+              "x-amzn-trace-id" : {
+                "description" : "Brand::TraceId",
+                "schema" : {
+                  "type" : "string",
+                  "description" : "Brand::TraceId"
+                },
+                "required" : true
+              }
+            }
+          },
+          "404" : {
+            "description" : "NotFound 404 response",
+            "headers" : {
+              "x-amzn-trace-id" : {
+                "description" : "Brand::TraceId",
+                "schema" : {
+                  "type" : "string",
+                  "description" : "Brand::TraceId"
+                },
+                "required" : true
+              }
+            }
+          },
+          "500" : {
+            "description" : "InternalServerError 500 response",
+            "headers" : {
+              "x-amzn-trace-id" : {
+                "description" : "Brand::TraceId",
+                "schema" : {
+                  "type" : "string",
+                  "description" : "Brand::TraceId"
+                },
+                "required" : true
+              }
+            }
+          }
+        },
+        "tags" : [ "Products" ],
+        "x-machine-user-auth" : {
+          "roles" : [ "OFFER_CONFIGURATOR" ]
+        }
+      }
+    },
     "/machine-user-api/v1/tenants/{tenantId}/legal-entities/{legalEntityId}/products" : {
       "get" : {
         "operationId" : "ListProducts",
@@ -830,6 +971,19 @@
           "schema" : {
             "type" : "string"
           }
+        }, {
+          "name" : "categoryIds",
+          "in" : "query",
+          "style" : "form",
+          "schema" : {
+            "type" : "array",
+            "items" : {
+              "type" : "integer",
+              "description" : "Brand::ProductCategoryId",
+              "format" : "int32"
+            }
+          },
+          "explode" : true
         }, {
           "name" : "sortBy",
           "in" : "query",
@@ -1043,6 +1197,306 @@
           }
         },
         "tags" : [ "Branches" ],
+        "x-machine-user-auth" : {
+          "roles" : [ "OFFER_CONFIGURATOR" ]
+        }
+      }
+    },
+    "/api/v1/tenants/{tenantId}/documents/{documentId}/file" : {
+      "get" : {
+        "description" : "Redirects (Location header) to a short-lived URL for the original document file. Released to machine users to fetch\nproduct images: pass the product's image documentAccessToken as the x-access-token query parameter and send the\nx-machine-user-client-id header. The access token is short-lived (one day); re-fetch the product list to obtain a\nfresh token once it expires.",
+        "operationId" : "GetDocumentFile",
+        "parameters" : [ {
+          "name" : "tenantId",
+          "in" : "path",
+          "description" : "Brand::TenantId",
+          "schema" : {
+            "type" : "string",
+            "description" : "Brand::TenantId"
+          },
+          "required" : true
+        }, {
+          "name" : "documentId",
+          "in" : "path",
+          "description" : "Brand::DocumentId",
+          "schema" : {
+            "type" : "integer",
+            "description" : "Brand::DocumentId",
+            "format" : "int32"
+          },
+          "required" : true
+        }, {
+          "name" : "x-access-token",
+          "in" : "query",
+          "description" : "Brand::DocumentAccessToken",
+          "schema" : {
+            "type" : "string",
+            "description" : "Brand::DocumentAccessToken"
+          },
+          "required" : true
+        }, {
+          "name" : "x-machine-user-client-id",
+          "in" : "header",
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "GetDocumentFile 200 response",
+            "headers" : {
+              "Location" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GetDocumentFileOutputPayload"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "BadRequest 400 response",
+            "headers" : {
+              "x-amzn-trace-id" : {
+                "description" : "Brand::TraceId",
+                "schema" : {
+                  "type" : "string",
+                  "description" : "Brand::TraceId"
+                },
+                "required" : true
+              }
+            },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BadRequestResponseContent"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized 401 response",
+            "headers" : {
+              "x-amzn-trace-id" : {
+                "description" : "Brand::TraceId",
+                "schema" : {
+                  "type" : "string",
+                  "description" : "Brand::TraceId"
+                },
+                "required" : true
+              }
+            },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/UnauthorizedResponseContent"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Forbidden 403 response",
+            "headers" : {
+              "x-amzn-trace-id" : {
+                "description" : "Brand::TraceId",
+                "schema" : {
+                  "type" : "string",
+                  "description" : "Brand::TraceId"
+                },
+                "required" : true
+              }
+            },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ForbiddenResponseContent"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "NotFound 404 response",
+            "headers" : {
+              "x-amzn-trace-id" : {
+                "description" : "Brand::TraceId",
+                "schema" : {
+                  "type" : "string",
+                  "description" : "Brand::TraceId"
+                },
+                "required" : true
+              }
+            }
+          },
+          "500" : {
+            "description" : "InternalServerError 500 response",
+            "headers" : {
+              "x-amzn-trace-id" : {
+                "description" : "Brand::TraceId",
+                "schema" : {
+                  "type" : "string",
+                  "description" : "Brand::TraceId"
+                },
+                "required" : true
+              }
+            }
+          }
+        },
+        "tags" : [ "Documents" ],
+        "x-machine-user-auth" : {
+          "roles" : [ "OFFER_CONFIGURATOR" ]
+        }
+      }
+    },
+    "/api/v1/tenants/{tenantId}/documents/{documentId}/preview" : {
+      "get" : {
+        "description" : "Redirects (Location header) to a short-lived URL for a document preview/thumbnail, falling back to the original file\nwhen no separate preview exists (e.g. for uploaded images). Released to machine users to render product-image\nthumbnails: pass the product's image documentAccessToken as the x-access-token query parameter and send the\nx-machine-user-client-id header. The access token is short-lived (one day); re-fetch the product list to obtain a\nfresh token once it expires.",
+        "operationId" : "GetDocumentPreview",
+        "parameters" : [ {
+          "name" : "tenantId",
+          "in" : "path",
+          "description" : "Brand::TenantId",
+          "schema" : {
+            "type" : "string",
+            "description" : "Brand::TenantId"
+          },
+          "required" : true
+        }, {
+          "name" : "documentId",
+          "in" : "path",
+          "description" : "Brand::DocumentId",
+          "schema" : {
+            "type" : "integer",
+            "description" : "Brand::DocumentId",
+            "format" : "int32"
+          },
+          "required" : true
+        }, {
+          "name" : "x-access-token",
+          "in" : "query",
+          "description" : "Brand::DocumentAccessToken",
+          "schema" : {
+            "type" : "string",
+            "description" : "Brand::DocumentAccessToken"
+          },
+          "required" : true
+        }, {
+          "name" : "x-machine-user-client-id",
+          "in" : "header",
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "GetDocumentPreview 200 response",
+            "headers" : {
+              "Location" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GetDocumentPreviewOutputPayload"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "BadRequest 400 response",
+            "headers" : {
+              "x-amzn-trace-id" : {
+                "description" : "Brand::TraceId",
+                "schema" : {
+                  "type" : "string",
+                  "description" : "Brand::TraceId"
+                },
+                "required" : true
+              }
+            },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BadRequestResponseContent"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized 401 response",
+            "headers" : {
+              "x-amzn-trace-id" : {
+                "description" : "Brand::TraceId",
+                "schema" : {
+                  "type" : "string",
+                  "description" : "Brand::TraceId"
+                },
+                "required" : true
+              }
+            },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/UnauthorizedResponseContent"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Forbidden 403 response",
+            "headers" : {
+              "x-amzn-trace-id" : {
+                "description" : "Brand::TraceId",
+                "schema" : {
+                  "type" : "string",
+                  "description" : "Brand::TraceId"
+                },
+                "required" : true
+              }
+            },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ForbiddenResponseContent"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "NotFound 404 response",
+            "headers" : {
+              "x-amzn-trace-id" : {
+                "description" : "Brand::TraceId",
+                "schema" : {
+                  "type" : "string",
+                  "description" : "Brand::TraceId"
+                },
+                "required" : true
+              }
+            }
+          },
+          "500" : {
+            "description" : "InternalServerError 500 response",
+            "headers" : {
+              "x-amzn-trace-id" : {
+                "description" : "Brand::TraceId",
+                "schema" : {
+                  "type" : "string",
+                  "description" : "Brand::TraceId"
+                },
+                "required" : true
+              }
+            }
+          }
+        },
+        "tags" : [ "Documents" ],
         "x-machine-user-auth" : {
           "roles" : [ "OFFER_CONFIGURATOR" ]
         }
@@ -1425,6 +1879,71 @@
         "type" : "string",
         "format" : "byte"
       },
+      "PaginatedProductCategories" : {
+        "type" : "object",
+        "properties" : {
+          "total" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "prevCursor" : {
+            "type" : "string"
+          },
+          "nextCursor" : {
+            "type" : "string"
+          },
+          "items" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/ProductCategory"
+            }
+          }
+        },
+        "required" : [ "items", "total" ]
+      },
+      "ParentProductCategory" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "description" : "Brand::ProductCategoryId",
+            "format" : "int32"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "position" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        },
+        "required" : [ "id", "name" ]
+      },
+      "ProductCategory" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "description" : "Brand::ProductCategoryId",
+            "format" : "int32"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "position" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "parent" : {
+            "$ref" : "#/components/schemas/ParentProductCategory"
+          }
+        },
+        "required" : [ "id", "name" ]
+      },
+      "ProductCategorySortBy" : {
+        "type" : "string",
+        "enum" : [ "ID", "NAME", "POSITION", "PARENT_NAME", "PRODUCT_CATEGORY" ]
+      },
       "BundlePriceType" : {
         "type" : "string",
         "enum" : [ "TOTAL", "FROM" ]
@@ -1501,9 +2020,44 @@
           },
           "bundleAvailableFromPriceGross" : {
             "type" : "number"
+          },
+          "image" : {
+            "$ref" : "#/components/schemas/ProductImage"
+          },
+          "categories" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/ProductCategory"
+            }
           }
         },
-        "required" : [ "bundleProducts", "id", "name", "prices" ]
+        "required" : [ "bundleProducts", "categories", "id", "name", "prices" ]
+      },
+      "ProductImage" : {
+        "type" : "object",
+        "description" : "Metadata of the product image. Fetch the actual image with the documentAccessToken against\nGET /api/v1/tenants/{tenantId}/documents/{documentId}/preview?x-access-token={documentAccessToken}\n(preview) or .../file (original). The access token is short-lived (valid for one day); re-fetch the\nproduct list to obtain a fresh token once it expires.",
+        "properties" : {
+          "documentId" : {
+            "type" : "integer",
+            "description" : "Brand::DocumentId",
+            "format" : "int32"
+          },
+          "documentAccessToken" : {
+            "type" : "string",
+            "description" : "Brand::DocumentAccessToken"
+          },
+          "fileName" : {
+            "type" : "string"
+          },
+          "mimeType" : {
+            "type" : "string"
+          },
+          "updatedAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          }
+        },
+        "required" : [ "documentId" ]
       },
       "ProductPrice" : {
         "type" : "object",
@@ -1616,6 +2170,455 @@
         "items" : {
           "$ref" : "#/components/schemas/LegalEntityBranch"
         }
+      },
+      "DatevExportJobSettingsChanged" : {
+        "type" : "object",
+        "properties" : {
+          "traceId" : {
+            "type" : "string",
+            "description" : "Brand::TraceId"
+          },
+          "message" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "traceId" ]
+      },
+      "ForbiddenResponseContent" : {
+        "type" : "object",
+        "properties" : {
+          "error" : {
+            "$ref" : "#/components/schemas/ForbiddenErrors"
+          }
+        }
+      },
+      "DatevOnlineDocumentTypeMappingInvalid" : {
+        "type" : "object",
+        "properties" : {
+          "traceId" : {
+            "type" : "string",
+            "description" : "Brand::TraceId"
+          },
+          "message" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "traceId" ]
+      },
+      "DatevOnlineNotConnected" : {
+        "type" : "object",
+        "properties" : {
+          "traceId" : {
+            "type" : "string",
+            "description" : "Brand::TraceId"
+          },
+          "message" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "traceId" ]
+      },
+      "GetDocumentPreviewOutputPayload" : {
+        "type" : "string",
+        "format" : "byte"
+      },
+      "UnauthorizedErrors" : {
+        "oneOf" : [ {
+          "type" : "object",
+          "title" : "datevOnlineNotConnected",
+          "properties" : {
+            "datevOnlineNotConnected" : {
+              "$ref" : "#/components/schemas/DatevOnlineNotConnected"
+            }
+          },
+          "required" : [ "datevOnlineNotConnected" ]
+        } ]
+      },
+      "TenantSuspended" : {
+        "type" : "object",
+        "properties" : {
+          "traceId" : {
+            "type" : "string",
+            "description" : "Brand::TraceId"
+          },
+          "tenantStatus" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "tenantStatus", "traceId" ]
+      },
+      "DatevOnlineMissingPermissions" : {
+        "type" : "object",
+        "properties" : {
+          "traceId" : {
+            "type" : "string",
+            "description" : "Brand::TraceId"
+          },
+          "message" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "traceId" ]
+      },
+      "DatevExportJobNotRetryable" : {
+        "type" : "object",
+        "properties" : {
+          "traceId" : {
+            "type" : "string",
+            "description" : "Brand::TraceId"
+          },
+          "message" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "traceId" ]
+      },
+      "BadRequestResponseContent" : {
+        "type" : "object",
+        "properties" : {
+          "error" : {
+            "$ref" : "#/components/schemas/BadRequestErrors"
+          }
+        }
+      },
+      "UnauthorizedResponseContent" : {
+        "type" : "object",
+        "properties" : {
+          "error" : {
+            "$ref" : "#/components/schemas/UnauthorizedErrors"
+          }
+        }
+      },
+      "MfaRequired" : {
+        "type" : "object",
+        "properties" : {
+          "traceId" : {
+            "type" : "string",
+            "description" : "Brand::TraceId"
+          }
+        },
+        "required" : [ "traceId" ]
+      },
+      "SignatureRequestViolationType" : {
+        "type" : "string",
+        "enum" : [ "PERSON_NOT_CONNECTED_TO_PROCESS", "FIELD_NOT_FOUND", "FIELD_ALREADY_REQUESTED_FOR_ANOTHER_PERSON", "DUPLICATE_PAIR_IN_BATCH", "FIELD_ALREADY_SIGNED", "FIELD_ASSIGNED_TWICE_IN_BATCH" ]
+      },
+      "DatevSettingsMissing" : {
+        "type" : "object",
+        "properties" : {
+          "traceId" : {
+            "type" : "string",
+            "description" : "Brand::TraceId"
+          },
+          "message" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "traceId" ]
+      },
+      "DatevStartOfFiscalYearMissing" : {
+        "type" : "object",
+        "properties" : {
+          "traceId" : {
+            "type" : "string",
+            "description" : "Brand::TraceId"
+          },
+          "message" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "traceId" ]
+      },
+      "DatevExportValidationFailed" : {
+        "type" : "object",
+        "properties" : {
+          "traceId" : {
+            "type" : "string",
+            "description" : "Brand::TraceId"
+          },
+          "message" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "traceId" ]
+      },
+      "LetterTemplateNotPdfA3Compliant" : {
+        "type" : "object",
+        "properties" : {
+          "message" : {
+            "type" : "string"
+          }
+        }
+      },
+      "SignatureRequestBatchInvalid" : {
+        "type" : "object",
+        "properties" : {
+          "traceId" : {
+            "type" : "string",
+            "description" : "Brand::TraceId"
+          },
+          "message" : {
+            "type" : "string"
+          },
+          "violations" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/SignatureRequestViolation"
+            }
+          }
+        },
+        "required" : [ "traceId", "violations" ]
+      },
+      "FactoringLetterheadMissing" : {
+        "type" : "object",
+        "properties" : {
+          "traceId" : {
+            "type" : "string",
+            "description" : "Brand::TraceId"
+          },
+          "message" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "traceId" ]
+      },
+      "ForbiddenErrors" : {
+        "oneOf" : [ {
+          "type" : "object",
+          "title" : "mfaRequired",
+          "properties" : {
+            "mfaRequired" : {
+              "$ref" : "#/components/schemas/MfaRequired"
+            }
+          },
+          "required" : [ "mfaRequired" ]
+        }, {
+          "type" : "object",
+          "title" : "datevOnlineMissingPermissions",
+          "properties" : {
+            "datevOnlineMissingPermissions" : {
+              "$ref" : "#/components/schemas/DatevOnlineMissingPermissions"
+            }
+          },
+          "required" : [ "datevOnlineMissingPermissions" ]
+        }, {
+          "type" : "object",
+          "title" : "tenantSuspended",
+          "properties" : {
+            "tenantSuspended" : {
+              "$ref" : "#/components/schemas/TenantSuspended"
+            }
+          },
+          "required" : [ "tenantSuspended" ]
+        } ]
+      },
+      "GetDocumentFileOutputPayload" : {
+        "type" : "string",
+        "format" : "byte"
+      },
+      "FacturaInsufficientQuantityOfItems" : {
+        "type" : "object",
+        "properties" : {
+          "traceId" : {
+            "type" : "string",
+            "description" : "Brand::TraceId"
+          },
+          "message" : {
+            "type" : "string"
+          },
+          "billingPositionIds" : {
+            "type" : "array",
+            "items" : {
+              "type" : "integer",
+              "description" : "Brand::FacturaBillingPositionId",
+              "format" : "int32"
+            }
+          }
+        },
+        "required" : [ "billingPositionIds", "traceId" ]
+      },
+      "DatevDateRangeNotWithinFiscalYear" : {
+        "type" : "object",
+        "properties" : {
+          "traceId" : {
+            "type" : "string",
+            "description" : "Brand::TraceId"
+          },
+          "message" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "traceId" ]
+      },
+      "CustomerPortalLegalLinksMissing" : {
+        "type" : "object",
+        "description" : "The legal entity's privacy and imprint links are both mandatory as soon as its customer portal configuration holds any content. The booleans tell which of the two is missing.",
+        "properties" : {
+          "traceId" : {
+            "type" : "string",
+            "description" : "Brand::TraceId"
+          },
+          "message" : {
+            "type" : "string"
+          },
+          "privacyLinkMissing" : {
+            "type" : "boolean"
+          },
+          "imprintLinkMissing" : {
+            "type" : "boolean"
+          }
+        },
+        "required" : [ "imprintLinkMissing", "privacyLinkMissing", "traceId" ]
+      },
+      "SignatureRequestViolation" : {
+        "type" : "object",
+        "properties" : {
+          "personId" : {
+            "type" : "integer",
+            "description" : "Brand::PersonId",
+            "format" : "int32"
+          },
+          "fieldName" : {
+            "type" : "string"
+          },
+          "violationType" : {
+            "$ref" : "#/components/schemas/SignatureRequestViolationType"
+          }
+        },
+        "required" : [ "fieldName", "personId", "violationType" ]
+      },
+      "BadRequestErrors" : {
+        "oneOf" : [ {
+          "type" : "object",
+          "title" : "datevSettingsMissing",
+          "properties" : {
+            "datevSettingsMissing" : {
+              "$ref" : "#/components/schemas/DatevSettingsMissing"
+            }
+          },
+          "required" : [ "datevSettingsMissing" ]
+        }, {
+          "type" : "object",
+          "title" : "datevStartOfFiscalYearMissing",
+          "properties" : {
+            "datevStartOfFiscalYearMissing" : {
+              "$ref" : "#/components/schemas/DatevStartOfFiscalYearMissing"
+            }
+          },
+          "required" : [ "datevStartOfFiscalYearMissing" ]
+        }, {
+          "type" : "object",
+          "title" : "datevDateRangeNotWithinFiscalYear",
+          "properties" : {
+            "datevDateRangeNotWithinFiscalYear" : {
+              "$ref" : "#/components/schemas/DatevDateRangeNotWithinFiscalYear"
+            }
+          },
+          "required" : [ "datevDateRangeNotWithinFiscalYear" ]
+        }, {
+          "type" : "object",
+          "title" : "datevOnlineDocumentTypeMappingInvalid",
+          "properties" : {
+            "datevOnlineDocumentTypeMappingInvalid" : {
+              "$ref" : "#/components/schemas/DatevOnlineDocumentTypeMappingInvalid"
+            }
+          },
+          "required" : [ "datevOnlineDocumentTypeMappingInvalid" ]
+        }, {
+          "type" : "object",
+          "title" : "datevExportValidationFailed",
+          "properties" : {
+            "datevExportValidationFailed" : {
+              "$ref" : "#/components/schemas/DatevExportValidationFailed"
+            }
+          },
+          "required" : [ "datevExportValidationFailed" ]
+        }, {
+          "type" : "object",
+          "title" : "datevExportJobNotRetryable",
+          "properties" : {
+            "datevExportJobNotRetryable" : {
+              "$ref" : "#/components/schemas/DatevExportJobNotRetryable"
+            }
+          },
+          "required" : [ "datevExportJobNotRetryable" ]
+        }, {
+          "type" : "object",
+          "title" : "datevExportJobSettingsChanged",
+          "properties" : {
+            "datevExportJobSettingsChanged" : {
+              "$ref" : "#/components/schemas/DatevExportJobSettingsChanged"
+            }
+          },
+          "required" : [ "datevExportJobSettingsChanged" ]
+        }, {
+          "type" : "object",
+          "title" : "facturaInsufficientQuantityOfItems",
+          "properties" : {
+            "facturaInsufficientQuantityOfItems" : {
+              "$ref" : "#/components/schemas/FacturaInsufficientQuantityOfItems"
+            }
+          },
+          "required" : [ "facturaInsufficientQuantityOfItems" ]
+        }, {
+          "type" : "object",
+          "title" : "letterTemplateNotPdfA3Compliant",
+          "properties" : {
+            "letterTemplateNotPdfA3Compliant" : {
+              "$ref" : "#/components/schemas/LetterTemplateNotPdfA3Compliant"
+            }
+          },
+          "required" : [ "letterTemplateNotPdfA3Compliant" ]
+        }, {
+          "type" : "object",
+          "title" : "factoringLetterheadMissing",
+          "properties" : {
+            "factoringLetterheadMissing" : {
+              "$ref" : "#/components/schemas/FactoringLetterheadMissing"
+            }
+          },
+          "required" : [ "factoringLetterheadMissing" ]
+        }, {
+          "type" : "object",
+          "title" : "signatureRequestBatchInvalid",
+          "properties" : {
+            "signatureRequestBatchInvalid" : {
+              "$ref" : "#/components/schemas/SignatureRequestBatchInvalid"
+            }
+          },
+          "required" : [ "signatureRequestBatchInvalid" ]
+        }, {
+          "type" : "object",
+          "title" : "signatureRequestWithdrawn",
+          "properties" : {
+            "signatureRequestWithdrawn" : {
+              "$ref" : "#/components/schemas/SignatureRequestWithdrawn"
+            }
+          },
+          "required" : [ "signatureRequestWithdrawn" ]
+        }, {
+          "type" : "object",
+          "title" : "customerPortalLegalLinksMissing",
+          "properties" : {
+            "customerPortalLegalLinksMissing" : {
+              "$ref" : "#/components/schemas/CustomerPortalLegalLinksMissing"
+            }
+          },
+          "required" : [ "customerPortalLegalLinksMissing" ]
+        } ]
+      },
+      "SignatureRequestWithdrawn" : {
+        "type" : "object",
+        "properties" : {
+          "traceId" : {
+            "type" : "string",
+            "description" : "Brand::TraceId"
+          },
+          "message" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "traceId" ]
       }
     },
     "securitySchemes" : {
@@ -1633,19 +2636,21 @@
     }
   },
   "tags" : [ {
-    "name" : "MachineUserBranchController"
+    "name" : "Branches"
   }, {
-    "name" : "MachineUserBurialFormController"
+    "name" : "Burial Forms"
   }, {
-    "name" : "MachineUserBurialTypeController"
+    "name" : "Burial Types"
   }, {
-    "name" : "MachineUserGraveTypeController"
+    "name" : "Documents"
   }, {
-    "name" : "MachineUserMeController"
+    "name" : "Grave Types"
   }, {
-    "name" : "MachineUserProcessController"
+    "name" : "Processes"
   }, {
-    "name" : "MachineUserProductController"
+    "name" : "Products"
+  }, {
+    "name" : "Users"
   } ],
   "servers" : [ {
     "url" : "https://funeral-management.api.cleverone.io",
