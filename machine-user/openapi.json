@@ -2184,6 +2184,10 @@
         },
         "required" : [ "traceId" ]
       },
+      "KpiReportPeriodInvalidReason" : {
+        "type" : "string",
+        "enum" : [ "END_BEFORE_START", "TOO_LONG" ]
+      },
       "ForbiddenResponseContent" : {
         "type" : "object",
         "properties" : {
@@ -2437,6 +2441,22 @@
         },
         "required" : [ "billingPositionIds", "traceId" ]
       },
+      "KpiReportPeriodInvalid" : {
+        "type" : "object",
+        "properties" : {
+          "traceId" : {
+            "type" : "string",
+            "description" : "Brand::TraceId"
+          },
+          "message" : {
+            "type" : "string"
+          },
+          "reason" : {
+            "$ref" : "#/components/schemas/KpiReportPeriodInvalidReason"
+          }
+        },
+        "required" : [ "reason", "traceId" ]
+      },
       "DatevDateRangeNotWithinFiscalYear" : {
         "type" : "object",
         "properties" : {
@@ -2605,6 +2625,15 @@
             }
           },
           "required" : [ "customerPortalLegalLinksMissing" ]
+        }, {
+          "type" : "object",
+          "title" : "kpiReportPeriodInvalid",
+          "properties" : {
+            "kpiReportPeriodInvalid" : {
+              "$ref" : "#/components/schemas/KpiReportPeriodInvalid"
+            }
+          },
+          "required" : [ "kpiReportPeriodInvalid" ]
         } ]
       },
       "SignatureRequestWithdrawn" : {
