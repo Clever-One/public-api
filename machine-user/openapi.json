@@ -6,252 +6,6 @@
     "description" : "API for machine-to-machine integrations. Authenticate using the x-machine-user-client-id and authorization headers."
   },
   "paths" : {
-    "/machine-user-api/v1/tenants/{tenantId}/legal-entities/{legalEntityId}/burial-types" : {
-      "get" : {
-        "operationId" : "ListBurialTypes",
-        "parameters" : [ {
-          "name" : "tenantId",
-          "in" : "path",
-          "description" : "Brand::TenantId",
-          "schema" : {
-            "type" : "string",
-            "description" : "Brand::TenantId"
-          },
-          "required" : true
-        }, {
-          "name" : "legalEntityId",
-          "in" : "path",
-          "description" : "Brand::LegalEntityId",
-          "schema" : {
-            "type" : "integer",
-            "description" : "Brand::LegalEntityId",
-            "format" : "int32"
-          },
-          "required" : true
-        }, {
-          "name" : "query",
-          "in" : "query",
-          "schema" : {
-            "type" : "string"
-          }
-        }, {
-          "name" : "sortBy",
-          "in" : "query",
-          "schema" : {
-            "$ref" : "#/components/schemas/BurialTypeSortBy"
-          }
-        }, {
-          "name" : "sortDirection",
-          "in" : "query",
-          "schema" : {
-            "$ref" : "#/components/schemas/SortDirection"
-          }
-        }, {
-          "name" : "cursor",
-          "in" : "query",
-          "schema" : {
-            "type" : "string"
-          }
-        }, {
-          "name" : "limit",
-          "in" : "query",
-          "schema" : {
-            "type" : "integer",
-            "default" : 50,
-            "maximum" : 60,
-            "minimum" : 1,
-            "format" : "int32"
-          }
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "ListBurialTypes 200 response",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/PaginatedBurialTypes"
-                }
-              }
-            }
-          },
-          "400" : {
-            "description" : "BadRequest 400 response",
-            "headers" : {
-              "x-amzn-trace-id" : {
-                "description" : "Brand::TraceId",
-                "schema" : {
-                  "type" : "string",
-                  "description" : "Brand::TraceId"
-                },
-                "required" : true
-              }
-            }
-          },
-          "401" : {
-            "description" : "Unauthorized 401 response",
-            "headers" : {
-              "x-amzn-trace-id" : {
-                "description" : "Brand::TraceId",
-                "schema" : {
-                  "type" : "string",
-                  "description" : "Brand::TraceId"
-                },
-                "required" : true
-              }
-            }
-          },
-          "403" : {
-            "description" : "Forbidden 403 response",
-            "headers" : {
-              "x-amzn-trace-id" : {
-                "description" : "Brand::TraceId",
-                "schema" : {
-                  "type" : "string",
-                  "description" : "Brand::TraceId"
-                },
-                "required" : true
-              }
-            }
-          },
-          "404" : {
-            "description" : "NotFound 404 response",
-            "headers" : {
-              "x-amzn-trace-id" : {
-                "description" : "Brand::TraceId",
-                "schema" : {
-                  "type" : "string",
-                  "description" : "Brand::TraceId"
-                },
-                "required" : true
-              }
-            }
-          },
-          "500" : {
-            "description" : "InternalServerError 500 response",
-            "headers" : {
-              "x-amzn-trace-id" : {
-                "description" : "Brand::TraceId",
-                "schema" : {
-                  "type" : "string",
-                  "description" : "Brand::TraceId"
-                },
-                "required" : true
-              }
-            }
-          }
-        },
-        "tags" : [ "Burial Types" ],
-        "x-machine-user-auth" : {
-          "roles" : [ "OFFER_CONFIGURATOR" ]
-        }
-      }
-    },
-    "/machine-user-api/v1/tenants/{tenantId}/legal-entities/{legalEntityId}/branches" : {
-      "get" : {
-        "operationId" : "ListBranches",
-        "parameters" : [ {
-          "name" : "tenantId",
-          "in" : "path",
-          "description" : "Brand::TenantId",
-          "schema" : {
-            "type" : "string",
-            "description" : "Brand::TenantId"
-          },
-          "required" : true
-        }, {
-          "name" : "legalEntityId",
-          "in" : "path",
-          "description" : "Brand::LegalEntityId",
-          "schema" : {
-            "type" : "integer",
-            "description" : "Brand::LegalEntityId",
-            "format" : "int32"
-          },
-          "required" : true
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "ListBranches 200 response",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/ListBranchesOutputPayload"
-                }
-              }
-            }
-          },
-          "400" : {
-            "description" : "BadRequest 400 response",
-            "headers" : {
-              "x-amzn-trace-id" : {
-                "description" : "Brand::TraceId",
-                "schema" : {
-                  "type" : "string",
-                  "description" : "Brand::TraceId"
-                },
-                "required" : true
-              }
-            }
-          },
-          "401" : {
-            "description" : "Unauthorized 401 response",
-            "headers" : {
-              "x-amzn-trace-id" : {
-                "description" : "Brand::TraceId",
-                "schema" : {
-                  "type" : "string",
-                  "description" : "Brand::TraceId"
-                },
-                "required" : true
-              }
-            }
-          },
-          "403" : {
-            "description" : "Forbidden 403 response",
-            "headers" : {
-              "x-amzn-trace-id" : {
-                "description" : "Brand::TraceId",
-                "schema" : {
-                  "type" : "string",
-                  "description" : "Brand::TraceId"
-                },
-                "required" : true
-              }
-            }
-          },
-          "404" : {
-            "description" : "NotFound 404 response",
-            "headers" : {
-              "x-amzn-trace-id" : {
-                "description" : "Brand::TraceId",
-                "schema" : {
-                  "type" : "string",
-                  "description" : "Brand::TraceId"
-                },
-                "required" : true
-              }
-            }
-          },
-          "500" : {
-            "description" : "InternalServerError 500 response",
-            "headers" : {
-              "x-amzn-trace-id" : {
-                "description" : "Brand::TraceId",
-                "schema" : {
-                  "type" : "string",
-                  "description" : "Brand::TraceId"
-                },
-                "required" : true
-              }
-            }
-          }
-        },
-        "tags" : [ "Branches" ],
-        "x-machine-user-auth" : {
-          "roles" : [ "OFFER_CONFIGURATOR" ]
-        }
-      }
-    },
     "/machine-user-api/v1/tenants/{tenantId}/legal-entities/{legalEntityId}/processes/{processId}/documents" : {
       "post" : {
         "description" : "Currently only supports upload of offer documents. the processId can be obtained from the response of the create request endpoint",
@@ -672,6 +426,146 @@
         }
       }
     },
+    "/machine-user-api/v1/tenants/{tenantId}/legal-entities/{legalEntityId}/burial-types" : {
+      "get" : {
+        "operationId" : "ListBurialTypes",
+        "parameters" : [ {
+          "name" : "tenantId",
+          "in" : "path",
+          "description" : "Brand::TenantId",
+          "schema" : {
+            "type" : "string",
+            "description" : "Brand::TenantId"
+          },
+          "required" : true
+        }, {
+          "name" : "legalEntityId",
+          "in" : "path",
+          "description" : "Brand::LegalEntityId",
+          "schema" : {
+            "type" : "integer",
+            "description" : "Brand::LegalEntityId",
+            "format" : "int32"
+          },
+          "required" : true
+        }, {
+          "name" : "query",
+          "in" : "query",
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "sortBy",
+          "in" : "query",
+          "schema" : {
+            "$ref" : "#/components/schemas/BurialTypeSortBy"
+          }
+        }, {
+          "name" : "sortDirection",
+          "in" : "query",
+          "schema" : {
+            "$ref" : "#/components/schemas/SortDirection"
+          }
+        }, {
+          "name" : "cursor",
+          "in" : "query",
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "schema" : {
+            "type" : "integer",
+            "default" : 50,
+            "maximum" : 60,
+            "minimum" : 1,
+            "format" : "int32"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "ListBurialTypes 200 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PaginatedBurialTypes"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "BadRequest 400 response",
+            "headers" : {
+              "x-amzn-trace-id" : {
+                "description" : "Brand::TraceId",
+                "schema" : {
+                  "type" : "string",
+                  "description" : "Brand::TraceId"
+                },
+                "required" : true
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized 401 response",
+            "headers" : {
+              "x-amzn-trace-id" : {
+                "description" : "Brand::TraceId",
+                "schema" : {
+                  "type" : "string",
+                  "description" : "Brand::TraceId"
+                },
+                "required" : true
+              }
+            }
+          },
+          "403" : {
+            "description" : "Forbidden 403 response",
+            "headers" : {
+              "x-amzn-trace-id" : {
+                "description" : "Brand::TraceId",
+                "schema" : {
+                  "type" : "string",
+                  "description" : "Brand::TraceId"
+                },
+                "required" : true
+              }
+            }
+          },
+          "404" : {
+            "description" : "NotFound 404 response",
+            "headers" : {
+              "x-amzn-trace-id" : {
+                "description" : "Brand::TraceId",
+                "schema" : {
+                  "type" : "string",
+                  "description" : "Brand::TraceId"
+                },
+                "required" : true
+              }
+            }
+          },
+          "500" : {
+            "description" : "InternalServerError 500 response",
+            "headers" : {
+              "x-amzn-trace-id" : {
+                "description" : "Brand::TraceId",
+                "schema" : {
+                  "type" : "string",
+                  "description" : "Brand::TraceId"
+                },
+                "required" : true
+              }
+            }
+          }
+        },
+        "tags" : [ "Burial Types" ],
+        "x-machine-user-auth" : {
+          "roles" : [ "OFFER_CONFIGURATOR" ]
+        }
+      }
+    },
     "/machine-user-api/v1/tenants/{tenantId}/legal-entities/{legalEntityId}/grave-types" : {
       "get" : {
         "operationId" : "ListGraveTypes",
@@ -807,6 +701,112 @@
           }
         },
         "tags" : [ "Grave Types" ],
+        "x-machine-user-auth" : {
+          "roles" : [ "OFFER_CONFIGURATOR" ]
+        }
+      }
+    },
+    "/machine-user-api/v1/tenants/{tenantId}/legal-entities/{legalEntityId}/branches" : {
+      "get" : {
+        "operationId" : "ListBranches",
+        "parameters" : [ {
+          "name" : "tenantId",
+          "in" : "path",
+          "description" : "Brand::TenantId",
+          "schema" : {
+            "type" : "string",
+            "description" : "Brand::TenantId"
+          },
+          "required" : true
+        }, {
+          "name" : "legalEntityId",
+          "in" : "path",
+          "description" : "Brand::LegalEntityId",
+          "schema" : {
+            "type" : "integer",
+            "description" : "Brand::LegalEntityId",
+            "format" : "int32"
+          },
+          "required" : true
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "ListBranches 200 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ListBranchesOutputPayload"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "BadRequest 400 response",
+            "headers" : {
+              "x-amzn-trace-id" : {
+                "description" : "Brand::TraceId",
+                "schema" : {
+                  "type" : "string",
+                  "description" : "Brand::TraceId"
+                },
+                "required" : true
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized 401 response",
+            "headers" : {
+              "x-amzn-trace-id" : {
+                "description" : "Brand::TraceId",
+                "schema" : {
+                  "type" : "string",
+                  "description" : "Brand::TraceId"
+                },
+                "required" : true
+              }
+            }
+          },
+          "403" : {
+            "description" : "Forbidden 403 response",
+            "headers" : {
+              "x-amzn-trace-id" : {
+                "description" : "Brand::TraceId",
+                "schema" : {
+                  "type" : "string",
+                  "description" : "Brand::TraceId"
+                },
+                "required" : true
+              }
+            }
+          },
+          "404" : {
+            "description" : "NotFound 404 response",
+            "headers" : {
+              "x-amzn-trace-id" : {
+                "description" : "Brand::TraceId",
+                "schema" : {
+                  "type" : "string",
+                  "description" : "Brand::TraceId"
+                },
+                "required" : true
+              }
+            }
+          },
+          "500" : {
+            "description" : "InternalServerError 500 response",
+            "headers" : {
+              "x-amzn-trace-id" : {
+                "description" : "Brand::TraceId",
+                "schema" : {
+                  "type" : "string",
+                  "description" : "Brand::TraceId"
+                },
+                "required" : true
+              }
+            }
+          }
+        },
+        "tags" : [ "Branches" ],
         "x-machine-user-auth" : {
           "roles" : [ "OFFER_CONFIGURATOR" ]
         }
@@ -1505,100 +1505,6 @@
   },
   "components" : {
     "schemas" : {
-      "BurialKind" : {
-        "type" : "string",
-        "enum" : [ "CREMATION", "EARTH", "NEUTRAL" ]
-      },
-      "BurialType" : {
-        "type" : "object",
-        "properties" : {
-          "id" : {
-            "type" : "integer",
-            "description" : "Brand::BurialTypeId",
-            "format" : "int32"
-          },
-          "name" : {
-            "type" : "string"
-          },
-          "burialKind" : {
-            "$ref" : "#/components/schemas/BurialKind"
-          }
-        },
-        "required" : [ "burialKind", "id", "name" ]
-      },
-      "BurialTypeSortBy" : {
-        "type" : "string",
-        "enum" : [ "ID", "NAME" ]
-      },
-      "PaginatedBurialTypes" : {
-        "type" : "object",
-        "properties" : {
-          "total" : {
-            "type" : "integer",
-            "format" : "int32"
-          },
-          "prevCursor" : {
-            "type" : "string"
-          },
-          "nextCursor" : {
-            "type" : "string"
-          },
-          "items" : {
-            "type" : "array",
-            "items" : {
-              "$ref" : "#/components/schemas/BurialType"
-            }
-          }
-        },
-        "required" : [ "items", "total" ]
-      },
-      "SortDirection" : {
-        "type" : "string",
-        "enum" : [ "ASC", "DESC" ]
-      },
-      "LegalEntityBranch" : {
-        "type" : "object",
-        "properties" : {
-          "id" : {
-            "type" : "integer",
-            "description" : "Brand::LegalEntityBranchId",
-            "format" : "int32"
-          },
-          "legalEntityId" : {
-            "type" : "integer",
-            "description" : "Brand::LegalEntityId",
-            "format" : "int32"
-          },
-          "name" : {
-            "type" : "string"
-          },
-          "street" : {
-            "type" : "string"
-          },
-          "streetNumber" : {
-            "type" : "string"
-          },
-          "zipCode" : {
-            "type" : "string"
-          },
-          "city" : {
-            "type" : "string"
-          },
-          "phone" : {
-            "type" : "string"
-          },
-          "email" : {
-            "type" : "string"
-          }
-        },
-        "required" : [ "id", "legalEntityId", "name" ]
-      },
-      "ListBranchesOutputPayload" : {
-        "type" : "array",
-        "items" : {
-          "$ref" : "#/components/schemas/LegalEntityBranch"
-        }
-      },
       "PersonCreateDto" : {
         "type" : "object",
         "properties" : {
@@ -2001,6 +1907,10 @@
         },
         "required" : [ "id", "name" ]
       },
+      "SortDirection" : {
+        "type" : "string",
+        "enum" : [ "ASC", "DESC" ]
+      },
       "TaxRate" : {
         "type" : "object",
         "properties" : {
@@ -2017,6 +1927,53 @@
           }
         },
         "required" : [ "id", "name", "rate" ]
+      },
+      "BurialKind" : {
+        "type" : "string",
+        "enum" : [ "CREMATION", "EARTH", "NEUTRAL" ]
+      },
+      "BurialType" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "description" : "Brand::BurialTypeId",
+            "format" : "int32"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "burialKind" : {
+            "$ref" : "#/components/schemas/BurialKind"
+          }
+        },
+        "required" : [ "burialKind", "id", "name" ]
+      },
+      "BurialTypeSortBy" : {
+        "type" : "string",
+        "enum" : [ "ID", "NAME" ]
+      },
+      "PaginatedBurialTypes" : {
+        "type" : "object",
+        "properties" : {
+          "total" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "prevCursor" : {
+            "type" : "string"
+          },
+          "nextCursor" : {
+            "type" : "string"
+          },
+          "items" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/BurialType"
+            }
+          }
+        },
+        "required" : [ "items", "total" ]
       },
       "GraveType" : {
         "type" : "object",
@@ -2057,6 +2014,49 @@
           }
         },
         "required" : [ "items", "total" ]
+      },
+      "LegalEntityBranch" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "description" : "Brand::LegalEntityBranchId",
+            "format" : "int32"
+          },
+          "legalEntityId" : {
+            "type" : "integer",
+            "description" : "Brand::LegalEntityId",
+            "format" : "int32"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "street" : {
+            "type" : "string"
+          },
+          "streetNumber" : {
+            "type" : "string"
+          },
+          "zipCode" : {
+            "type" : "string"
+          },
+          "city" : {
+            "type" : "string"
+          },
+          "phone" : {
+            "type" : "string"
+          },
+          "email" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "id", "legalEntityId", "name" ]
+      },
+      "ListBranchesOutputPayload" : {
+        "type" : "array",
+        "items" : {
+          "$ref" : "#/components/schemas/LegalEntityBranch"
+        }
       },
       "PaginatedProductCategories" : {
         "type" : "object",
