@@ -2,7 +2,7 @@
   "openapi" : "3.0.2",
   "info" : {
     "title" : "Machine User API",
-    "version" : "1.0.0",
+    "version" : "1.1.0",
     "description" : "API for machine-to-machine integrations. Authenticate using the x-machine-user-client-id and authorization headers."
   },
   "paths" : {
@@ -1519,6 +1519,11 @@
           },
           "title" : {
             "$ref" : "#/components/schemas/Title"
+          },
+          "honorificName" : {
+            "type" : "string",
+            "pattern" : "\\S",
+            "description" : "Title name such as Dr. or Mag.; unknown titles are added to the tenant's title list."
           },
           "email" : {
             "type" : "string"
